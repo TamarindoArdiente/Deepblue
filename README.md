@@ -83,7 +83,7 @@ PostgreSQL real, validando constraints reales (UNIQUE, FK, CHECK).
 ## 8. Query Methods implementados
 
 
-## 🚑 RescueCaseRepository
+##  RescueCaseRepository
 
 - `RescueCaseRepository.findByCaseCode`
 - `RescueCaseRepository.existsByCaseCode`
@@ -93,7 +93,7 @@ PostgreSQL real, validando constraints reales (UNIQUE, FK, CHECK).
 
 ---
 
-## 🐢 AnimalRepository
+##  AnimalRepository
 
 - `AnimalRepository.findByAnimalCode`
 - `AnimalRepository.findByCommonNameContainingIgnoreCase`
@@ -102,13 +102,13 @@ PostgreSQL real, validando constraints reales (UNIQUE, FK, CHECK).
 
 ---
 
-## 🩺 ExpertiseRepository
+##  ExpertiseRepository
 
 - `ExpertiseRepository.findByNameIgnoreCase`
 
 ---
 
-## 💊 TreatmentRepository
+##  TreatmentRepository
 
 - `TreatmentRepository.findByAnimalIdOrderByPerformedAtAsc`
 
