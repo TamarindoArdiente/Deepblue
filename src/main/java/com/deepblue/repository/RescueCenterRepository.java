@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface RescueCenterRepository extends JpaRepository<RescueCenter, Long> {
 
-    // Query Method: buscar un centro mediante su código
+   
     Optional<RescueCenter> findByCode(String code);
 }

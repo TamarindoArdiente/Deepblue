@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface ExpertiseRepository extends JpaRepository<Expertise, Long> {
 
-    // Query Method: buscar por nombre ignorando mayúsculas/minúsculas
+
     Optional<Expertise> findByNameIgnoreCase(String name);
 }

@@ -10,23 +10,18 @@ import java.util.Optional;
 
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
-    // Consulta A: buscar animal por animalCode
+ 
     Optional<Animal> findByAnimalCode(String animalCode);
 
-    // Consulta B: buscar animales cuyo commonName contenga determinado texto (ignore case)
+ 
     List<Animal> findByCommonNameContainingIgnoreCase(String text);
 
-    // Paso 35: animales cuyo caso de rescate tenga determinado estado
-    // Animal -> rescueCase -> status
+   
     List<Animal> findByRescueCaseStatus(RescueStatus status);
 
-    // Paso 36: animales pertenecientes a un centro determinado
-    // Animal -> RescueCase -> RescueCenter -> code
+
     List<Animal> findByRescueCaseRescueCenterCode(String centerCode);
 
-    // Reto sin guía (Parte XIII):
-    // Animales en cierto estado de rescueCase que hayan recibido al menos un
-    // tratamiento realizado por un especialista con determinada experiencia.
     @Query("""
             select distinct a
             from Animal a
