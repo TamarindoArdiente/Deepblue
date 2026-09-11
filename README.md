@@ -83,18 +83,34 @@ PostgreSQL real, validando constraints reales (UNIQUE, FK, CHECK).
 ## 8. Query Methods implementados
 
 
-RescueCenterRepository.findByCode
-RescueCaseRepository.findByCaseCode
-RescueCaseRepository.existsByCaseCode
-RescueCaseRepository.findByStatusOrderByRescueDateAsc
-RescueCaseRepository.findByRescueCenterCode
-RescueCaseRepository.findByRescueDateAfterOrderByRescueDateDesc
-AnimalRepository.findByAnimalCode
-AnimalRepository.findByCommonNameContainingIgnoreCase
-AnimalRepository.findByRescueCaseStatus
-AnimalRepository.findByRescueCaseRescueCenterCode
-ExpertiseRepository.findByNameIgnoreCase
-TreatmentRepository.findByAnimalIdOrderByPerformedAtAsc
+## 🚑 RescueCaseRepository
+
+- `RescueCaseRepository.findByCaseCode`
+- `RescueCaseRepository.existsByCaseCode`
+- `RescueCaseRepository.findByStatusOrderByRescueDateAsc`
+- `RescueCaseRepository.findByRescueCenterCode`
+- `RescueCaseRepository.findByRescueDateAfterOrderByRescueDateDesc`
+
+---
+
+## 🐢 AnimalRepository
+
+- `AnimalRepository.findByAnimalCode`
+- `AnimalRepository.findByCommonNameContainingIgnoreCase`
+- `AnimalRepository.findByRescueCaseStatus`
+- `AnimalRepository.findByRescueCaseRescueCenterCode`
+
+---
+
+## 🩺 ExpertiseRepository
+
+- `ExpertiseRepository.findByNameIgnoreCase`
+
+---
+
+## 💊 TreatmentRepository
+
+- `TreatmentRepository.findByAnimalIdOrderByPerformedAtAsc`
 
 
 ## 9. Consultas JPQL implementadas 
