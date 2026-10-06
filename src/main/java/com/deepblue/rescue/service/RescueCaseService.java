@@ -8,16 +8,9 @@ import java.util.List;
 
 public interface RescueCaseService {
 
-    RescueCaseResponse findByCode(
-            String caseCode
-    );
+    RescueCaseResponse findByCode(String caseCode);
 
-    List<RescueCaseResponse> findByStatus(
-            RescueStatus status
-    );
+    List<RescueCaseResponse> findByStatus(RescueStatus status);
 
-    RescueCaseResponse changeStatus(
-            String caseCode,
-            ChangeRescueStatusRequest request
-    );
+    RescueCaseResponse changeStatus(String caseCode, ChangeRescueStatusRequest request);
 }

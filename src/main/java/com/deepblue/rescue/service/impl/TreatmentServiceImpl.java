@@ -1,6 +1,5 @@
 package com.deepblue.rescue.service.impl;
 
-
 import com.deepblue.rescue.domain.Animal;
 import com.deepblue.rescue.domain.RescueCase;
 import com.deepblue.rescue.domain.RescueStatus;
@@ -17,27 +16,25 @@ import com.deepblue.rescue.repository.TreatmentRepository;
 import com.deepblue.rescue.service.TreatmentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
-public class TreatmentServiceImpl
-        implements TreatmentService {
+public class TreatmentServiceImpl implements TreatmentService {
+
+    private static final Set<RescueStatus> BLOCKED_STATUSES = Set.of(RescueStatus.RELEASED, RescueStatus.CLOSED);
 
     private final AnimalRepository animalRepository;
-
     private final SpecialistRepository specialistRepository;
-
     private final TreatmentRepository treatmentRepository;
-
     private final TreatmentMapper mapper;
 
-    public TreatmentServiceImpl(
-            AnimalRepository animalRepository,
-            SpecialistRepository specialistRepository,
-            TreatmentRepository treatmentRepository,
-            TreatmentMapper mapper) {
-
+    public TreatmentServiceImpl(AnimalRepository animalRepository,
+                                 SpecialistRepository specialistRepository,
+                                 TreatmentRepository treatmentRepository,
+                                 TreatmentMapper mapper) {
         this.animalRepository = animalRepository;
         this.specialistRepository = specialistRepository;
         this.treatmentRepository = treatmentRepository;
@@ -45,75 +42,41 @@ public class TreatmentServiceImpl
     }
 
     @Override
-@Transactional(readOnly = true)
-public List<TreatmentResponse> findByAnimalCode(String animalCode) {
+    @Transactional
+    public TreatmentResponse register(CreateTreatmentRequest request) {
+        Animal animal = animalRepository.findByAnimalCode(request.animalCode())
+                .orElseThrow(() -> new ResourceNotFoundException("Animal not found: " + request.animalCode()));
 
-    return treatmentRepository
-            .findByAnimalAnimalCodeOrderByPerformedAtAsc(animalCode)
-            .stream()
-            .map(mapper::toResponse)
-            .toList();
-}
+        Specialist specialist = specialistRepository.findByProfessionalCode(request.specialistCode())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Specialist not found: " + request.specialistCode()));
 
-@Override
-@Transactional
-public TreatmentResponse register(
-        CreateTreatmentRequest request) {
+        if (!specialist.isActive()) {
+            throw new BusinessRuleException("Specialist is not active: " + request.specialistCode());
+        }
 
-    Animal animal = animalRepository
-            .findByAnimalCode(request.animalCode())
-            .orElseThrow(
-                    () -> new ResourceNotFoundException(
-                            "Animal not found: " + request.animalCode()
-                    )
-            );
+        RescueCase rescueCase = animal.getRescueCase();
+        if (BLOCKED_STATUSES.contains(rescueCase.getStatus())) {
+            throw new BusinessRuleException(
+                    "Cannot register treatment because the rescue case is " + rescueCase.getStatus());
+        }
 
-    Specialist specialist = specialistRepository
-            .findByProfessionalCode(request.specialistCode())
-            .orElseThrow(
-                    () -> new ResourceNotFoundException(
-                            "Specialist not found: " + request.specialistCode()
-                    )
-            );
+        if (request.performedAt().toLocalDate().isBefore(rescueCase.getRescueDate())) {
+            throw new BusinessRuleException(
+                    "Treatment date cannot be before the rescue date: " + rescueCase.getRescueDate());
+        }
 
-    if (!specialist.isActive()) {
-        throw new BusinessRuleException(
-                "Specialist is not active: "
-                        + request.specialistCode()
-        );
+        Treatment treatment = new Treatment(
+                animal, specialist, request.performedAt(), request.type(), request.description());
+
+        Treatment saved = treatmentRepository.save(treatment);
+        return mapper.toResponse(saved);
     }
 
-    RescueCase rescueCase = animal.getRescueCase();
-
-    if (rescueCase.getStatus() == RescueStatus.RELEASED
-            || rescueCase.getStatus() == RescueStatus.CLOSED) {
-
-        throw new BusinessRuleException(
-                "Animal cannot receive treatments because "
-                        + "the rescue case is "
-                        + rescueCase.getStatus()
-        );
+    @Override
+    public List<TreatmentResponse> findByAnimalCode(String animalCode) {
+        return mapper.toResponseList(
+                treatmentRepository.findByAnimalAnimalCodeOrderByPerformedAtAsc(animalCode));
     }
-
-  
-    if (request.performedAt().toLocalDate()
-            .isBefore(rescueCase.getRescueDate())) {
-
-        throw new BusinessRuleException(
-                "Treatment date cannot be before rescue date"
-        );
-    }
-
-    Treatment treatment = new Treatment(
-            animal,
-            specialist,
-            request.performedAt(),
-            request.type(),
-            request.description()
-    );
-
-    Treatment savedTreatment = treatmentRepository.save(treatment);
-
-    return mapper.toResponse(savedTreatment);
 }
-}
+
