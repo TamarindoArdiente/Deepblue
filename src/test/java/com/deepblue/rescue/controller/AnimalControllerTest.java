@@ -10,6 +10,7 @@ import com.deepblue.rescue.exception.ResourceNotFoundException;
 import com.deepblue.rescue.service.AnimalService;
 import com.deepblue.rescue.service.TreatmentService;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
