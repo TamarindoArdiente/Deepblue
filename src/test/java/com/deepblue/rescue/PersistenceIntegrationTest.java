@@ -275,7 +275,6 @@ class PersistenceIntegrationTest {
     @Test
     void treatmentsShouldBeOrderedChronologically() {
         RescueCenter center = new RescueCenter("DB-TR", "DeepBlue Treatments", "Santa Marta");
-        rescueCenterRepository.save(center);
 
         RescueCase rescueCase = new RescueCase("RES-TR-1", LocalDate.of(2026, 6, 1),
                 "Loc TR", RescueStatus.IN_REHABILITATION);
@@ -313,7 +312,6 @@ class PersistenceIntegrationTest {
     @Test
     void treatmentsBetweenDatesShouldReturnOnlyThoseWithinRange() {
         RescueCenter center = new RescueCenter("DB-INT", "DeepBlue Interval", "Santa Marta");
-        rescueCenterRepository.save(center);
 
         RescueCase rescueCase = new RescueCase("RES-INT-1", LocalDate.of(2026, 8, 1),
                 "Loc INT", RescueStatus.IN_REHABILITATION);
@@ -346,7 +344,6 @@ class PersistenceIntegrationTest {
     @Test
     void savingDuplicateAnimalCodeShouldViolateUniqueConstraint() {
         RescueCenter center = new RescueCenter("DB-UQ", "DeepBlue Unique", "Santa Marta");
-        rescueCenterRepository.save(center);
 
         RescueCase case1 = new RescueCase("RES-UQ-1", LocalDate.of(2026, 7, 1),
                 "Loc UQ 1", RescueStatus.ADMITTED);
@@ -373,7 +370,6 @@ class PersistenceIntegrationTest {
     void integratorChallengeScenario() {
         // Centro
         RescueCenter center = new RescueCenter("DB-CAR", "DeepBlue Caribbean", "Santa Marta");
-        rescueCenterRepository.save(center);
 
         // Caso
         RescueCase rescueCase = new RescueCase("RES-2026-100", LocalDate.of(2026, 8, 18),
@@ -390,7 +386,6 @@ class PersistenceIntegrationTest {
         animal.assignMedicalRecord(record);
 
         rescueCenterRepository.save(center);
-
         // Especialista
         Expertise marineReptiles = expertiseRepository.findByNameIgnoreCase("Marine Reptiles").orElseThrow();
         Expertise trauma = expertiseRepository.findByNameIgnoreCase("Trauma").orElseThrow();
